@@ -27,5 +27,14 @@
 *.out
 *.app
 
-# Eclipse Cdt project files
-*.project
+# build folder
+build/
+
+# text editor autosaves
+*~
+
+# eclipse settings
+.cproject
+.project
+.settings/
+
