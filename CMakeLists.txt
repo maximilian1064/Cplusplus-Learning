@@ -41,5 +41,5 @@ add_custom_target(purge COMMAND rm -r *)
 
 # include header
 include_directories(Compiler@Coursera/include)
-include_directories(CPP@coursera/include)
+include_directories(CPP@Coursera/include)
 
