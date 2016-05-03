@@ -32,6 +32,10 @@ add_executable(compiler_learning ${Compiler})
 file(GLOB CPlusPlus "CPP@Coursera/CppConst.cpp")
 add_executable(cpp_learning ${CPlusPlus})
 
+# make cpp_coursera_assignment
+file(GLOB CppAssignment "CPP@Coursera/CppAssignments/*.cpp")
+add_executable(cpp_assignment ${CppAssignment})
+
 ####################  aditional make targets  ########################
 
 # make purge
