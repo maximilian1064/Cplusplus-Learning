@@ -33,7 +33,7 @@ file(GLOB CPlusPlus "CPP@Coursera/CppConst.cpp")
 add_executable(cpp_learning ${CPlusPlus})
 
 # make cpp_coursera_assignment
-file(GLOB CppAssignment "CPP@Coursera/CppAssignments/*.cpp")
+file(GLOB CppAssignment "CPP@Coursera/CppAssignments/A-WOW-1.cpp")
 add_executable(cpp_assignment ${CppAssignment})
 
 ####################  aditional make targets  ########################
