@@ -3,6 +3,7 @@
  */
 
 #include <iostream>
+#include <iomanip>
 #include <vector>
 #include <string>
 #include <map>
@@ -11,25 +12,13 @@
 struct HeadQuarter
 {
 	int nWarriors;
+	int strengthPoint;
 	std::vector<std::string> nameOrder;
 	std::vector<int> strengthOrder;
 	std::vector<int> nCreated;
 
 };
 
-/* class Warrior
-{
-private:
-	int m_index;
-	int m_strength;
-	std::string m_name;
-public:
-	Warrior(int i, int s, std::string n): m_index(i), m_strength(s), m_name(n)
-	{
-		std::cout << m_name << " " << m_index << " born with strength "
-				  <<
-	}
-}; */
 
 // Input Cases
 struct InputCase
@@ -61,9 +50,7 @@ int main()
     		bool StrengthTableGood = true;
 			for(int i=0; i<5; i++)
 			{
-				if(std::cin >> temp.StrengthTable[i])
-					std::cout << "exe" << std::endl;
-				else
+				if( !(std::cin >> temp.StrengthTable[i]) )
 				{
 					StrengthTableGood = false;
 					break;
@@ -78,47 +65,118 @@ int main()
     }
 
 
-    /* initialize two headquarters, create name order and strength order */
-    HeadQuarter red, blue;
-    red.nWarriors = 0;
-    blue.nWarriors = 0;
-    red.nCreated = {0,0,0,0,0};
-    blue.nCreated = {0,0,0,0,0};
-    red.nameOrder = { "iceman", "lion", "wolf", "ninja", "dragon" };
-    blue.nameOrder = { "lion", "dragon", "ninja", "iceman", "wolf" };
-    std::map<std::string, int> name2Strength;
-    std::string InputNameOrder[5] = { "dragon", "ninja", "iceman", "lion", "wolf" };
-    for(int i=0; i<5; i++)
-    	name2Strength.insert( std::pair<std::string, int> (InputNameOrder[i], Cases.at(0).StrengthTable[i]) );
-    std::map<std::string, int>::iterator iter;
-    for(int i=0; i<5; i++)
+
+    /*
+     * show information for each case
+     */
+
+    for(unsigned int i_ca=0; i_ca<Cases.size(); i_ca++)
     {
-    	iter = name2Strength.find(red.nameOrder.at(i));
-    	red.strengthOrder.push_back(iter->second);
-    	iter = name2Strength.find(blue.nameOrder.at(i));
-    	blue.strengthOrder.push_back(iter->second);
+    	/* Case index */
+        std::cout << "Case:" << Cases.at(i_ca).IndCase << std::endl;
+
+		/* initialize two headquarters, create name order and strength order */
+		HeadQuarter red, blue;
+		red.nWarriors = 0;
+		blue.nWarriors = 0;
+		red.nCreated = {0,0,0,0,0};
+		blue.nCreated = {0,0,0,0,0};
+		red.nameOrder = { "iceman", "lion", "wolf", "ninja", "dragon" };
+		blue.nameOrder = { "lion", "dragon", "ninja", "iceman", "wolf" };
+		std::map<std::string, int> name2Strength;
+		std::string InputNameOrder[5] = { "dragon", "ninja", "iceman", "lion", "wolf" };
+		for(int i=0; i<5; i++)
+			name2Strength.insert( std::pair<std::string, int> (InputNameOrder[i], Cases.at(i_ca).StrengthTable[i]) );
+		std::map<std::string, int>::iterator iter;
+		for(int i=0; i<5; i++)
+		{
+			iter = name2Strength.find(red.nameOrder.at(i));
+			red.strengthOrder.push_back(iter->second);
+			iter = name2Strength.find(blue.nameOrder.at(i));
+			blue.strengthOrder.push_back(iter->second);
+		}
+		red.strengthPoint = Cases.at(i_ca).TotalStrength;
+		blue.strengthPoint = red.strengthPoint;
+
+
+		bool redRunout = false;
+		bool blueRunout = false;
+		int time = 0;
+		while( !(redRunout && blueRunout) )
+		{
+
+			/*show red headquarter information*/
+
+			if(!redRunout)
+			{
+				redRunout = true;
+
+				// creating a warrior in red headquarter
+				for(int i=time; i<time+5; i++)
+				{
+					if( red.strengthPoint >= red.strengthOrder.at(i%5) )
+					{
+						red.nCreated.at(i%5) ++;
+						std::cout << std::setw(3) << std::setfill('0') << time
+								  << " red" << " " << red.nameOrder.at(i%5) << " " << time+1
+								  << " born with strength" << " " << red.strengthOrder.at(i%5)
+								  << "," << red.nCreated.at(i%5)
+								  << " " << red.nameOrder.at(i%5)
+								  << " in red headquarter"
+								  << std::endl;
+						red.strengthPoint -= red.strengthOrder.at(i%5);
+						redRunout = false;
+						break;
+					}
+				}
+
+				// stop making warriors when strength point runs out
+				if(redRunout)
+					std::cout << std::setw(3) << std::setfill('0') << time
+							  << " red headquarter stops making warriors"
+							  << std::endl;
+			}
+
+
+			/*show blue headquarter information*/
+
+			if(!blueRunout)
+			{
+				blueRunout = true;
+
+				// creating a warrior in blue headquarter
+				for(int i=time; i<time+5; i++)
+				{
+					if( blue.strengthPoint >= blue.strengthOrder.at(i%5) )
+					{
+						blue.nCreated.at(i%5) ++;
+						std::cout << std::setw(3) << std::setfill('0') << time
+								  << " blue" << " " << blue.nameOrder.at(i%5) << " " << time+1
+								  << " born with strength" << " " << blue.strengthOrder.at(i%5)
+								  << "," << blue.nCreated.at(i%5)
+								  << " " << blue.nameOrder.at(i%5)
+								  << " in blue headquarter"
+								  << std::endl;
+						blue.strengthPoint -= blue.strengthOrder.at(i%5);
+						blueRunout = false;
+						break;
+					}
+				}
+
+				// stop making warriors when strength point runs out
+				if(blueRunout)
+					std::cout << std::setw(3) << std::setfill('0') << time
+							  << " blue headquarter stops making warriors"
+							  << std::endl;
+			}
+
+			// time increment
+			time++;
+
+		}
+
     }
 
 
-    /* for test */
-    for(unsigned int i=0; i<red.strengthOrder.size(); i++)
-    	std::cout << red.strengthOrder.at(i) << std::endl;
-    for(unsigned int i=0; i<blue.strengthOrder.size(); i++)
-    	std::cout << blue.strengthOrder.at(i) << std::endl;
-
-
-
-
-
-
-    /*for (std::vector<InputCase>::iterator it_Cases=Cases.begin(); it_Cases != Cases.end(); it_Cases++ )
-    {
-    	std::cout << (*it_Cases).IndCase << std::endl;
-    	std::cout << (*it_Cases).TotalStrength << std::endl;
-    	for(int i=0; i<5; i++)
-    		std::cout << (*it_Cases).StrengthTable[i] << std::endl;
-    }*/
-
-    std::cout << "end";
 	return 0;
 }
