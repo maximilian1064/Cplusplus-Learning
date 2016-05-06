@@ -38,16 +38,16 @@ int main()
     std::vector<InputCase> Cases;
     InputCase temp;
 
-    // Input line 1 must be effective / check for EOF
-    while ( std::cin >> temp.IndCase && !std::cin.eof() )
+    // Input line of case number must be effective / check for EOF
+    if( std::cin >> temp.IndCase && !std::cin.eof() )
     {
 
-    	// Input line 2 must be effective
-    	if(std::cin >> temp.TotalStrength)
-    	{
+    	// Input line 1 must be effective / check for EOF
 
-    		// Input line 3 must be effective
-    		bool StrengthTableGood = true;
+		while ( std::cin >> temp.TotalStrength && !std::cin.eof() )
+		{
+			// Input line 2 must be effective
+			bool StrengthTableGood = true;
 			for(int i=0; i<5; i++)
 			{
 				if( !(std::cin >> temp.StrengthTable[i]) )
@@ -60,8 +60,7 @@ int main()
 			// add to Input cases list if all lines are okay
 			if(StrengthTableGood)
 				Cases.push_back(temp);
-    	}
-
+		}
     }
 
 
@@ -73,16 +72,20 @@ int main()
     for(unsigned int i_ca=0; i_ca<Cases.size(); i_ca++)
     {
     	/* Case index */
-        std::cout << "Case:" << Cases.at(i_ca).IndCase << std::endl;
+        std::cout << "Case:" << i_ca+1 << std::endl;
 
 		/* initialize two headquarters, create name order and strength order */
 		HeadQuarter red, blue;
 		red.nWarriors = 0;
 		blue.nWarriors = 0;
-		red.nCreated = {0,0,0,0,0};
-		blue.nCreated = {0,0,0,0,0};
-		red.nameOrder = { "iceman", "lion", "wolf", "ninja", "dragon" };
-		blue.nameOrder = { "lion", "dragon", "ninja", "iceman", "wolf" };
+
+		red.nCreated = std::vector<int>(5,0);
+		blue.nCreated = std::vector<int>(5,0);
+		std::string temp1[5] = { "iceman", "lion", "wolf", "ninja", "dragon" };
+		std::string temp2[5] = { "lion", "dragon", "ninja", "iceman", "wolf" };
+		red.nameOrder.assign(temp1,temp1+5);
+		blue.nameOrder.assign(temp2,temp2+5);
+
 		std::map<std::string, int> name2Strength;
 		std::string InputNameOrder[5] = { "dragon", "ninja", "iceman", "lion", "wolf" };
 		for(int i=0; i<5; i++)
@@ -99,9 +102,14 @@ int main()
 		blue.strengthPoint = red.strengthPoint;
 
 
+		/* show information */
 		bool redRunout = false;
 		bool blueRunout = false;
 		int time = 0;
+		int RedWarriorGenStartInd = 0;
+		int BlueWarriorGenStartInd = 0;
+
+
 		while( !(redRunout && blueRunout) )
 		{
 
@@ -112,7 +120,7 @@ int main()
 				redRunout = true;
 
 				// creating a warrior in red headquarter
-				for(int i=time; i<time+5; i++)
+				for(int i=RedWarriorGenStartInd; i<RedWarriorGenStartInd+5; i++)
 				{
 					if( red.strengthPoint >= red.strengthOrder.at(i%5) )
 					{
@@ -125,6 +133,7 @@ int main()
 								  << " in red headquarter"
 								  << std::endl;
 						red.strengthPoint -= red.strengthOrder.at(i%5);
+						RedWarriorGenStartInd = i%5 + 1;
 						redRunout = false;
 						break;
 					}
@@ -145,7 +154,7 @@ int main()
 				blueRunout = true;
 
 				// creating a warrior in blue headquarter
-				for(int i=time; i<time+5; i++)
+				for(int i=BlueWarriorGenStartInd; i<BlueWarriorGenStartInd+5; i++)
 				{
 					if( blue.strengthPoint >= blue.strengthOrder.at(i%5) )
 					{
@@ -158,6 +167,7 @@ int main()
 								  << " in blue headquarter"
 								  << std::endl;
 						blue.strengthPoint -= blue.strengthOrder.at(i%5);
+						BlueWarriorGenStartInd = i%5 + 1;
 						blueRunout = false;
 						break;
 					}
