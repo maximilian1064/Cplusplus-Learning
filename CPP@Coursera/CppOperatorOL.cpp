@@ -1,10 +1,10 @@
 /*
- * Operator Overloading & "=" Overloading
+ * Operator Overloading
  *
  * 1. Operator Overloading:
  *    The idea of operator overloading is based on function overloading.
  *    Form:    Type operator+ (arguments)  ---->  #Operands = #Arguments
- *             Type class::operator+ (arguments) ---->  #Operands = #Arguments-1,
+ *             Type class::operator+ (arguments) ---->  #Operands = #Arguments+1,
  *             as the object already serves as an operand, A+B ----> A.operator+(B)
  * 2. Overloading of "=", sort of important stuff !!!
  *
@@ -35,7 +35,7 @@ Ccomplex operator- (const Ccomplex& c1, const Ccomplex& c2)
 	std::cout << "normal function" << std::endl;
 	// c1.CcomplexPrint();
 	// the compiler will treat this as modify of the const argument,
-	// who konw what happens in this member function?????
+	// who knows what happens in this member function?????
     return Ccomplex(c1.real-c2.real, c1.image-c2.image);
 }
 

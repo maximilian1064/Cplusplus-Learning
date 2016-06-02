@@ -29,7 +29,7 @@ file(GLOB Compiler "Compiler@Coursera/*.cpp")
 add_executable(compiler_learning ${Compiler})
 
 # make cpp_learning
-file(GLOB CPlusPlus "CPP@Coursera/CppOperatorOL.cpp")
+file(GLOB CPlusPlus "CPP@Coursera/CppAssignmentOperatorOL.cpp")
 add_executable(cpp_learning ${CPlusPlus})
 
 # make cpp_coursera_assignment
