@@ -38,3 +38,5 @@ build/
 .project
 .settings/
 
+#
+a.out
